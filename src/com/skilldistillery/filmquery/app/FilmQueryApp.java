@@ -60,10 +60,7 @@ public class FilmQueryApp {
 
 	private void launch() {
 		Scanner input = new Scanner(System.in);
-
 		startUserInterface(input);
-
-
 		input.close();
 	}
 
@@ -102,7 +99,7 @@ public class FilmQueryApp {
 		if (film != null) {
 			System.out.println(film.getTitle());
 			System.out.println(film.getDesc());
-			System.out.println(film.getLangId()) ;
+			langIdTranslator(film.getLangId()) ;
 		} else {
 			System.out.println("no such film exists");
 
@@ -118,13 +115,36 @@ public class FilmQueryApp {
 			for( Film film : films) {
 				System.out.println(film.getTitle());
 				System.out.println(film.getDesc());
-				System.out.println(film.getLangId());
+				langIdTranslator(film.getLangId());
 			}
 			
 		}else {
 			System.out.println("sorry no match, please try again ");
 		}
 			
+	}
+	
+	private void langIdTranslator(int lang) {
+		
+		if (lang == 1) {
+			System.out.println("English");
+		}
+		if (lang == 2) {
+			System.out.println("Italian");
+		}
+		if (lang == 3) {
+			System.out.println("Japanese");
+		}
+		if (lang == 4) {
+			System.out.println("Mandrin");
+		}
+		if (lang == 5) {
+			System.out.println("French");
+		}
+		if (lang == 6) {
+			System.out.println("German");
+		}
+		
 	}
 	private void exit() {
 		System.out.println("thank you come again! ");
