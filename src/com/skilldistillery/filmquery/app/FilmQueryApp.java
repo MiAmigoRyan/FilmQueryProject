@@ -67,7 +67,8 @@ public class FilmQueryApp {
 	private void startUserInterface(Scanner input) {
 		int choice;
 		do {
-		System.out.println("Choose  one " 
+		System.out.println(" ----------------------------"
+				+ "\n Choose  one " 
 		        + "\n 1 : look up film by film ID " 
 				+ "\n 2 : look up film by keyword " 
 		        + "\n 3 : exit ");
@@ -99,7 +100,21 @@ public class FilmQueryApp {
 		if (film != null) {
 			System.out.println(film.getTitle());
 			System.out.println(film.getDesc());
-			langIdTranslator(film.getLangId()) ;
+			System.out.print("Language :"); 
+			langIdTranslator(film.getLangId());
+			System.out.println("Release year :"+film.getReleaseYear());
+			System.out.println("Rating :"+film.getRating());
+			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+			if (actors != null) {
+				System.out.println("Actors : ");
+				for(Actor actor : actors) {
+					System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+				}
+			} else {
+				System.out.println("there were no actors in this film");
+			}
+			System.out.println("\n");
+			
 		} else {
 			System.out.println("no such film exists");
 
@@ -115,17 +130,27 @@ public class FilmQueryApp {
 			for( Film film : films) {
 				System.out.println(film.getTitle());
 				System.out.println(film.getDesc());
+				System.out.print("Language :"); 
 				langIdTranslator(film.getLangId());
+				System.out.println("Release year :"+film.getReleaseYear());
+				System.out.println("Rating :"+film.getRating());
+				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+				if (actors != null) {
+					System.out.println("Actors : ");
+					for(Actor actor : actors) {
+						System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+					}
+				} else {
+					System.out.println("there were no actors in this film");
+				}
 			}
 			
 		}else {
 			System.out.println("sorry no match, please try again ");
-		}
-			
+		}		
 	}
 	
 	private void langIdTranslator(int lang) {
-		
 		if (lang == 1) {
 			System.out.println("English");
 		}

@@ -44,6 +44,17 @@ public class Film {
 	}
 
 
+	public Film(int filmId2,String title2, String desc2, int lang, short releaseYear, String rating2) {
+		this.filmId = filmId2;
+		this.title = title2;
+		this.desc = desc2;
+		this.langId = lang;
+		this.releaseYear = releaseYear;
+		this.rating= rating2;
+	}
+
+
+
 	public List<Actor> getActors() {
 		List<Actor> copy = new ArrayList<>(actors);
 		return copy;
