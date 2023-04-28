@@ -32,35 +32,28 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		               + " FROM film "
 		               + " WHERE "
 		               + " title LIKE ?" //1
-		               + " OR description LIKE ?	" //2
-		               + " OR releas_year LIKE ?	" //3
-		               + " OR language_id LIKE ?	" //4
-		               + " OR rating LIKE ?	"  //5
-		               + " OR special_features LIKE ?	"; //6
+		               + " OR description LIKE ?	"; //2
+		              
 		    
 		    PreparedStatement stmt = conn.prepareStatement(sql);
 		    stmt.setString(1, "%"+keyword+"%");
 		    stmt.setString(2, "%"+keyword+"%");
-		    stmt.setString(3, "%"+keyword+"%");
-		    stmt.setString(4, "%"+keyword+"%");
-		    stmt.setString(5, "%"+keyword+"%");
-		    stmt.setString(6, "%"+keyword+"%");
+		    
 		    ResultSet rs = stmt.executeQuery();
 		    while (rs.next()) {
-		      int filmId = rs.getInt("id");
+		   //   int filmId = rs.getInt("id");
 		      String title = rs.getString("title");
 		      String desc = rs.getString("description");
-		      short releaseYear = rs.getShort("release_year");
-		      int langId = rs.getInt("language_id");
-		      int rentDur = rs.getInt("rental_duration");
-		      double rate = rs.getDouble("rental_rate");
-		      int length = rs.getInt("length");
-		      double repCost = rs.getDouble("replacement_cost");
-		      String rating = rs.getString("rating");
-		      String features = rs.getString("special_features");
+//		      short releaseYear = rs.getShort("release_year");
+//		      int langId = rs.getInt("language_id");
+//		      int rentDur = rs.getInt("rental_duration");
+//		      double rate = rs.getDouble("rental_rate");
+//		      int length = rs.getInt("length");
+//		      double repCost = rs.getDouble("replacement_cost");
+//		      String rating = rs.getString("rating");
+//		      String features = rs.getString("special_features");
 		      
-		     Film film = new Film(filmId, title, desc, releaseYear, langId,
-		                           rentDur, rate, length, repCost, rating, features);
+		     Film film = new Film(title, desc);
 		      films.add(film);
 		    } 
 		    rs.close();

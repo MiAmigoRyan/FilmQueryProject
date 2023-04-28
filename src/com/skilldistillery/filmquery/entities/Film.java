@@ -5,6 +5,7 @@ import java.util.List;
 
 public class Film {
 	private List<Actor> actors;
+	
 	private int filmId;
 	private String title;
 	private String desc;
@@ -36,6 +37,12 @@ public class Film {
 	}
 	
 	
+
+	public Film(String title2, String desc2) {
+		this.title = title2;
+		this.desc = desc2;
+	}
+
 
 	public List<Actor> getActors() {
 		List<Actor> copy = new ArrayList<>(actors);

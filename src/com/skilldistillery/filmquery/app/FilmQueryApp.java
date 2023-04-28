@@ -48,6 +48,13 @@ public class FilmQueryApp {
 		} else {
 			System.out.println("this actor has not appeared in any films");
 		}
+		
+		List<Film> films2 = db.findFilmsByKeyword("dog");
+		if (films2 != null) {
+			System.out.println(films2);
+		}else {
+			System.out.println("sorry no match, please try again ");
+		}
 
 	}
 
@@ -93,14 +100,31 @@ public class FilmQueryApp {
 
 		Film film = db.findFilmById(in);
 		if (film != null) {
-			System.out.println(film);
+			System.out.println(film.getTitle());
+			System.out.println(film.getDesc());
+			System.out.println(film.getLangId()) ;
 		} else {
 			System.out.println("no such film exists");
 
 		}
 	}
 	private void filmByKeyword() {
+		System.out.println("enter keyword ");
+		Scanner sc = new Scanner(System.in);
+		String keyword = sc.next();
 		
+		List<Film> films = db.findFilmsByKeyword(keyword);
+		if (films != null) {
+			for( Film film : films) {
+				System.out.println(film.getTitle());
+				System.out.println(film.getDesc());
+				System.out.println(film.getLangId());
+			}
+			
+		}else {
+			System.out.println("sorry no match, please try again ");
+		}
+			
 	}
 	private void exit() {
 		System.out.println("thank you come again! ");
