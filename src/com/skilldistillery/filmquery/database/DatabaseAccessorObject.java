@@ -23,7 +23,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			e.printStackTrace();
 		}
 	}
-	@Override
 	public List<Film> findFilmsByKeyword(String keyword){
 		List<Film> films = new ArrayList<>();
 		
@@ -48,21 +47,21 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		    stmt.setString(6, "%"+keyword+"%");
 		    ResultSet rs = stmt.executeQuery();
 		    while (rs.next()) {
-//		      int filmId = rs.getInt("id");
-//		      String title = rs.getString("title");
-//		      String desc = rs.getString("description");
-//		      short releaseYear = rs.getShort("release_year");
-//		      int langId = rs.getInt("language_id");
-//		      int rentDur = rs.getInt("rental_duration");
-//		      double rate = rs.getDouble("rental_rate");
-//		      int length = rs.getInt("length");
-//		      double repCost = rs.getDouble("replacement_cost");
-//		      String rating = rs.getString("rating");
-//		      String features = rs.getString("special_features");
-//		      
-//		     Film film = new Film(filmId, title, desc, releaseYear, langId,
-//		                           rentDur, rate, length, repCost, rating, features);
-//		      films.add(film);
+		      int filmId = rs.getInt("id");
+		      String title = rs.getString("title");
+		      String desc = rs.getString("description");
+		      short releaseYear = rs.getShort("release_year");
+		      int langId = rs.getInt("language_id");
+		      int rentDur = rs.getInt("rental_duration");
+		      double rate = rs.getDouble("rental_rate");
+		      int length = rs.getInt("length");
+		      double repCost = rs.getDouble("replacement_cost");
+		      String rating = rs.getString("rating");
+		      String features = rs.getString("special_features");
+		      
+		     Film film = new Film(filmId, title, desc, releaseYear, langId,
+		                           rentDur, rate, length, repCost, rating, features);
+		      films.add(film);
 		    } 
 		    rs.close();
 		    stmt.close();
