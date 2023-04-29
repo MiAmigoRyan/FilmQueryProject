@@ -14,7 +14,7 @@ public class FilmQueryApp {
 	private DatabaseAccessor db = new DatabaseAccessorObject();
 	
 	private int in ;
-	
+	private String keyword;
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
@@ -84,7 +84,9 @@ public class FilmQueryApp {
 			
 			break;
 		case 2:
+			
 			filmByKeyword(input);
+			
 			break;
 		case 3:
 			exit();
@@ -95,6 +97,7 @@ public class FilmQueryApp {
 		} while (choice != 3);
 	}
 	private void subMenu(Scanner input) {
+
 		System.out.println(" ----------------------------\n"
 				+ "\n Choose  one "
 				+ "\n 1 : Show all film details "
@@ -119,12 +122,27 @@ public class FilmQueryApp {
 	private void filmDetails(Scanner input) {
 		
 		
-		Film film = db.findFilmById( in );
+		List<Film> films = filmKeyQuery(keyword);
+		
+		Film film = db.findFilmById(in);
+		
 		if (film != null) {
 			System.out.println(film);
 			System.out.print("Language :"); 
 			langIdTranslator(film.getLangId());
 		}
+		
+		if (films != null ) {
+			for(Film films1 : films) {
+				System.out.println(films1);
+				System.out.print("Language :"); 
+				langIdTranslator(film.getLangId());
+			}
+		}
+	}
+	
+	private List<Film> filmKeyQuery(String keyword){
+		return db.findFilmsByKeyword(keyword);
 	}
 	private void filmByFilmId(Scanner input) {
 		
@@ -159,14 +177,19 @@ public class FilmQueryApp {
 		}
 		
 	}
+	
+	
 	private void filmByKeyword(Scanner input) {
 		System.out.println("enter keyword ");
 		
-		String keyword = input.next();
-		
+		keyword = input.next();
+		//                                            1
 		List<Film> films = db.findFilmsByKeyword(keyword);
 		if (films != null) {
 			for( Film film : films) {
+				
+				in = film.getFilmId();
+				
 				System.out.println(film.getTitle());
 				System.out.println(film.getDesc());
 				System.out.print("Language :"); 
