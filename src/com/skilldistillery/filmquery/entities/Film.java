@@ -70,9 +70,9 @@ public class Film {
 
 	@Override
 	public String toString() {
-		return "filmId=" + filmId + "/n title=" + title + "/n desc=" + desc + "\n releaseYear=" + releaseYear
-				+ "\n langId=" + langId + "\n rentDur=" + rentDur + "\n rate=" + rate + "\n length=" + length + "\n repCost="
-				+ repCost + "\n rating=" + rating + "\n features=" + features;
+		return "ID : " + filmId + "\n title " + title + "\n rental rate " + rate +"\n description " + desc + "\n year released : " + releaseYear
+				+ "\n rental duration " + rentDur + "\n length of film " + length + "\n replacement cost "
+				+ repCost + "\n rating " + rating + "\n special features" + features;
 	}
 	
 	public int getFilmId() {

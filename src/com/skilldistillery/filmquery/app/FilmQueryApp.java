@@ -12,7 +12,9 @@ import com.skilldistillery.filmquery.entities.Film;
 public class FilmQueryApp {
 
 	private DatabaseAccessor db = new DatabaseAccessorObject();
-
+	
+	private int in ;
+	
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
@@ -77,10 +79,12 @@ public class FilmQueryApp {
 		
 		switch (choice) {
 		case 1:
-			filmByFilmId();
+			
+			filmByFilmId(input);
+			
 			break;
 		case 2:
-			filmByKeyword();
+			filmByKeyword(input);
 			break;
 		case 3:
 			exit();
@@ -90,11 +94,43 @@ public class FilmQueryApp {
 			}
 		} while (choice != 3);
 	}
-
-	private void filmByFilmId() {
+	private void subMenu(Scanner input) {
+		System.out.println(" ----------------------------\n"
+				+ "\n Choose  one "
+				+ "\n 1 : Show all film details "
+				+ "\n 2 : Return to Main Menu ");
+		int choice;
+		choice = input.nextInt();
+		do {
+		switch(choice) {
+		case 1:
+			filmDetails(input);
+			break;
+		case 2:
+			System.out.println("returning to main menu");
+			break;
+		default:
+			System.out.println("Invalid input, choose 1 or 2");
+			break;
+			}	
+		} while (choice != 1);
+		
+	}
+	private void filmDetails(Scanner input) {
+		
+		
+		Film film = db.findFilmById( in );
+		if (film != null) {
+			System.out.println(film);
+			System.out.print("Language :"); 
+			langIdTranslator(film.getLangId());
+		}
+	}
+	private void filmByFilmId(Scanner input) {
+		
 		System.out.println("enter film ID ");
-		Scanner sc = new Scanner(System.in);
-		int in = sc.nextInt();
+		
+		in = input.nextInt();
 
 		Film film = db.findFilmById(in);
 		if (film != null) {
@@ -112,18 +148,21 @@ public class FilmQueryApp {
 				}
 			} else {
 				System.out.println("there were no actors in this film");
-			}
+			
+			} subMenu(input);
+			
 			System.out.println("\n");
 			
 		} else {
 			System.out.println("no such film exists");
 
 		}
+		
 	}
-	private void filmByKeyword() {
+	private void filmByKeyword(Scanner input) {
 		System.out.println("enter keyword ");
-		Scanner sc = new Scanner(System.in);
-		String keyword = sc.next();
+		
+		String keyword = input.next();
 		
 		List<Film> films = db.findFilmsByKeyword(keyword);
 		if (films != null) {
@@ -143,11 +182,12 @@ public class FilmQueryApp {
 				} else {
 					System.out.println("there were no actors in this film");
 				}
-			}
+			} subMenu(input);
 			
 		}else {
 			System.out.println("sorry no match, please try again ");
 		}		
+	
 	}
 	
 	private void langIdTranslator(int lang) {
