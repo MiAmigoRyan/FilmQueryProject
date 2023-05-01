@@ -11,6 +11,7 @@ public interface DatabaseAccessor {
   List<Actor> findActorsByFilmId(int filmId);
   List<Film> findFilmsByActorId(int actorId);
   List<Film> findFilmsByKeyword(String keyword);
+  Category findCategoryByFilmId(int filmId) ;
 
 
 }

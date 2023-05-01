@@ -14,7 +14,9 @@ public class FilmQueryApp {
 	private DatabaseAccessor db = new DatabaseAccessorObject();
 	
 	private int in ;
+	
 	private String keyword;
+	
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
@@ -96,7 +98,7 @@ public class FilmQueryApp {
 			}
 		} while (choice != 3);
 	}
-	private void subMenu(Scanner input) {
+	private void subMenuByID(Scanner input) {
 
 		System.out.println(" ----------------------------\n"
 				+ "\n Choose  one "
@@ -107,7 +109,7 @@ public class FilmQueryApp {
 		do {
 		switch(choice) {
 		case 1:
-			filmDetails(input);
+			filmDetailsById(input);
 			break;
 		case 2:
 			System.out.println("returning to main menu");
@@ -119,24 +121,65 @@ public class FilmQueryApp {
 		} while (choice != 1);
 		
 	}
-	private void filmDetails(Scanner input) {
+	private void filmDetailsById(Scanner input) {
 		
 		
-		List<Film> films = filmKeyQuery(keyword);
-		
-		Film film = db.findFilmById(in);
+		Film film = db.findFilmById( in );
 		
 		if (film != null) {
 			System.out.println(film);
 			System.out.print("Language :"); 
-			langIdTranslator(film.getLangId());
+			langIdTranslator(film.getLangId());	
+			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+			if (actors != null) {
+				System.out.println("Actors : ");
+				for(Actor actor : actors) {
+					System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+				}
+			
+			System.out.println( db.findCategoryByFilmId( in ));						
+			}
 		}
+	}
+	private void subMenuByKeyword(Scanner input) {
+
+		System.out.println(" ----------------------------\n"
+				+ "\n Choose  one "
+				+ "\n 1 : Show all film details "
+				+ "\n 2 : Return to Main Menu ");
+		int choice;
+		choice = input.nextInt();
+		do {
+		switch(choice) {
+		case 1:
+			filmDetailsByKeyword(input);
+			break;
+		case 2:
+			System.out.println("returning to main menu");
+			break;
+		default:
+			System.out.println("Invalid input, choose 1 or 2");
+			break;
+			}	
+		} while (choice != 1);
+	
+	}
+	private void filmDetailsByKeyword(Scanner input) {	
+		System.out.println(keyword);
+		List<Film> films = filmKeyQuery(keyword);
+		System.out.println(films);
 		
 		if (films != null ) {
-			for(Film films1 : films) {
-				System.out.println(films1);
+			System.out.println(films.size() + " films found from query" +"\""+keyword+"\"");
+			for(Film film : films) {
+				System.out.println(film);				
 				System.out.print("Language :"); 
 				langIdTranslator(film.getLangId());
+				
+				System.out.print("Category : "); 
+				
+				System.out.println( db.findCategoryByFilmId(in));
+		
 			}
 		}
 	}
@@ -144,6 +187,7 @@ public class FilmQueryApp {
 	private List<Film> filmKeyQuery(String keyword){
 		return db.findFilmsByKeyword(keyword);
 	}
+		
 	private void filmByFilmId(Scanner input) {
 		
 		System.out.println("enter film ID ");
@@ -167,7 +211,7 @@ public class FilmQueryApp {
 			} else {
 				System.out.println("there were no actors in this film");
 			
-			} subMenu(input);
+			} subMenuByID(input);
 			
 			System.out.println("\n");
 			
@@ -178,18 +222,15 @@ public class FilmQueryApp {
 		
 	}
 	
-	
 	private void filmByKeyword(Scanner input) {
 		System.out.println("enter keyword ");
 		
 		keyword = input.next();
-		//                                            1
+		
 		List<Film> films = db.findFilmsByKeyword(keyword);
 		if (films != null) {
 			for( Film film : films) {
-				
 				in = film.getFilmId();
-				
 				System.out.println(film.getTitle());
 				System.out.println(film.getDesc());
 				System.out.print("Language :"); 
@@ -205,7 +246,8 @@ public class FilmQueryApp {
 				} else {
 					System.out.println("there were no actors in this film");
 				}
-			} subMenu(input);
+			} 
+			subMenuByKeyword(input);
 			
 		}else {
 			System.out.println("sorry no match, please try again ");

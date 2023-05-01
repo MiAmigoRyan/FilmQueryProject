@@ -5,7 +5,7 @@ import java.util.List;
 
 public class Film {
 	private List<Actor> actors;
-	
+	private String catName;
 	private int filmId;
 	private String title;
 	private String desc;
@@ -51,6 +51,24 @@ public class Film {
 		this.langId = lang;
 		this.releaseYear = releaseYear;
 		this.rating= rating2;
+	}
+
+
+
+	public Film(String name) {
+		this.catName = name;
+	}
+
+
+
+	public String getCatName() {
+		return catName;
+	}
+
+
+
+	public void setCatName(String catName) {
+		this.catName = catName;
 	}
 
 

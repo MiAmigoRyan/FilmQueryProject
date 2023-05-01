@@ -160,7 +160,6 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 			stmt.close();
 			conn.close();
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return film;
@@ -194,5 +193,41 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		}
 		return actor;
 	}
-
+	
+ public Category findCategoryByFilmId(int filmId) {
+//	 System.out.println ( "###"+ filmId );
+	 Category category = null;
+	 try {
+		 String sql = "SELECT name "
+				+ "FROM category "
+               	+ " JOIN film_category " 
+				+ "ON category.id = film_category.film_id "
+				+ "JOIN film "
+				+ "ON film_category.film_id = film.id "
+				+ "WHERE film_category.film_id = ? " ;
+		 
+			Connection conn = DriverManager.getConnection(URL, USER, PWD);
+			PreparedStatement stmt = conn.prepareStatement(sql);
+			stmt.setInt(1, filmId);
+			ResultSet rs = stmt.executeQuery();
+//			System.out.println("$$$$"+rs.next());
+			if(rs.next()) {
+				String name = rs.getString("name");
+				
+				category = new Category( name );
+//				System.out.println ( "###"+ category );
+				
+				category.setName( name );
+				
+			}
+			stmt.close();
+			conn.close();
+	 }
+	 
+	 catch (SQLException e) {
+		 e.printStackTrace();
+	 }
+	 return category;
+	 
+ }
 }
