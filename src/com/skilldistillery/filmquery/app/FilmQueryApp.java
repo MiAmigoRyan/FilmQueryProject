@@ -141,7 +141,7 @@ public class FilmQueryApp {
 			}
 		}
 	}
-	private void subMenuByKeyword(Scanner input) {
+	private void subMenuByKeyword(Scanner input, List<Film> films) {
 
 		System.out.println(" ----------------------------\n"
 				+ "\n Choose  one "
@@ -152,7 +152,7 @@ public class FilmQueryApp {
 		do {
 		switch(choice) {
 		case 1:
-			filmDetailsByKeyword(input);
+			filmDetailsByKeyword(input, films);
 			break;
 		case 2:
 			System.out.println("returning to main menu");
@@ -164,10 +164,9 @@ public class FilmQueryApp {
 		} while (choice != 1);
 	
 	}
-	private void filmDetailsByKeyword(Scanner input) {	
-		System.out.println(keyword);
-		List<Film> films = filmKeyQuery(keyword);
-		System.out.println(films);
+	private void filmDetailsByKeyword(Scanner input, List<Film> films) {	
+		//System.out.println(keyword);
+		
 		
 		if (films != null ) {
 			System.out.println(films.size() + " films found from query" +"\""+keyword+"\"");
@@ -175,10 +174,9 @@ public class FilmQueryApp {
 				System.out.println(film);				
 				System.out.print("Language :"); 
 				langIdTranslator(film.getLangId());
-				
 				System.out.print("Category : "); 
+				System.out.println(db.findCategoryByFilmId(film.getFilmId()));
 				
-				System.out.println( db.findCategoryByFilmId(in));
 		
 			}
 		}
@@ -247,7 +245,7 @@ public class FilmQueryApp {
 					System.out.println("there were no actors in this film");
 				}
 			} 
-			subMenuByKeyword(input);
+			subMenuByKeyword(input, films);
 			
 		}else {
 			System.out.println("sorry no match, please try again ");

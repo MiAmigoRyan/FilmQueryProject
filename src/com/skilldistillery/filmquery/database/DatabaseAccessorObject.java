@@ -4,6 +4,7 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,14 +42,20 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		    
 		    ResultSet rs = stmt.executeQuery();
 		    while (rs.next()) {
-		      int filmId = rs.getInt("id");
-		      String title = rs.getString("title");
-		      String desc = rs.getString("description");
-		      int lang = rs.getInt("language_id");
-		      short releaseYear = rs.getShort("release_year");
-		      String rating = rs.getString("rating");
-		      
-		     Film film = new Film(filmId, title, desc, lang, releaseYear, rating);
+		    	  int filmId = rs.getInt("id");
+			      String title = rs.getString("title");
+			      String desc = rs.getString("description");
+			      short releaseYear = rs.getShort("release_year");
+			      int langId = rs.getInt("language_id");
+			      int rentDur = rs.getInt("rental_duration");
+			      double rate = rs.getDouble("rental_rate");
+			      int length = rs.getInt("length");
+			      double repCost = rs.getDouble("replacement_cost");
+			      String rating = rs.getString("rating");
+			      String features = rs.getString("special_features");
+			      
+			     Film film = new Film(filmId, title, desc, releaseYear, langId,
+			                           rentDur, rate, length, repCost, rating, features);
 		      films.add(film);
 		    } 
 		    rs.close();
@@ -128,6 +135,7 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		  }
 		  return films;
 		}
+	
 	@Override
 	public Film findFilmById(int fId) {
 		Film film = null;
@@ -194,9 +202,10 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		return actor;
 	}
 	
- public Category findCategoryByFilmId(int filmId) {
-//	 System.out.println ( "###"+ filmId );
-	 Category category = null;
+ public Category findCategoryByFilmId(Integer filmId) {
+	 System.out.println ( "###"+ filmId );
+	 Category category = new Category();
+	 int temp = filmId;
 	 try {
 		 String sql = "SELECT name "
 				+ "FROM category "
@@ -208,18 +217,28 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 		 
 			Connection conn = DriverManager.getConnection(URL, USER, PWD);
 			PreparedStatement stmt = conn.prepareStatement(sql);
-			stmt.setInt(1, filmId);
-			ResultSet rs = stmt.executeQuery();
-//			System.out.println("$$$$"+rs.next());
-			if(rs.next()) {
-				String name = rs.getString("name");
-				
-				category = new Category( name );
-//				System.out.println ( "###"+ category );
-				
-				category.setName( name );
-				
+			
+			System.out.println("###############"+ temp);
+			
+			stmt.setInt(1, temp);
+			
+			ResultSet rs = stmt.getResultSet();
+			ResultSetMetaData rsmd = rs.getMetaData();
+			int colCount= rsmd.getColumnCount();
+			for(int i =1 ; i<=colCount; i++ ) {
+				System.out.println(rsmd.getCatalogName(i)+" : "+rs.getString(i));
 			}
+//			
+//			System.out.println("$$$$"+rs.next());
+//			System.out.println("$$$$$$$"+temp);
+//			if(rs.next()) {
+//				System.out.println ( "************"+ temp );
+//				String name = rs.getString("name");
+//			
+//				category = new Category( name );
+//				category.setName( name );
+//				
+//			}
 			stmt.close();
 			conn.close();
 	 }
