@@ -203,42 +203,37 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 	
  public Category findCategoryByFilmId(Integer filmId) {
+	 
 	 System.out.println ( "###"+ filmId );
+	 
 	 Category category = new Category();
-	 int temp = filmId;
+
+	
 	 try {
 		 String sql = "SELECT name "
 				+ "FROM category "
-               	+ " JOIN film_category " 
-				+ "ON category.id = film_category.film_id "
+               	+ "JOIN film_category " 
+				+ "ON category.id = film_category.category_id "
 				+ "JOIN film "
 				+ "ON film_category.film_id = film.id "
-				+ "WHERE film_category.film_id = ? " ;
+				+ "WHERE film_category.film_id = ?" ;
+		 
 		 
 			Connection conn = DriverManager.getConnection(URL, USER, PWD);
 			PreparedStatement stmt = conn.prepareStatement(sql);
+				
+			stmt.setInt(1, filmId);
 			
-			System.out.println("###############"+ temp);
+			ResultSet rs = stmt.executeQuery();
+
+			if(rs.next()) {
+				System.out.println ( filmId );
+				String name = rs.getString("name");
 			
-			stmt.setInt(1, temp);
-			
-			ResultSet rs = stmt.getResultSet();
-			ResultSetMetaData rsmd = rs.getMetaData();
-			int colCount= rsmd.getColumnCount();
-			for(int i =1 ; i<=colCount; i++ ) {
-				System.out.println(rsmd.getCatalogName(i)+" : "+rs.getString(i));
+				category = new Category( name );
+				category.setName( name );
+				
 			}
-//			
-//			System.out.println("$$$$"+rs.next());
-//			System.out.println("$$$$$$$"+temp);
-//			if(rs.next()) {
-//				System.out.println ( "************"+ temp );
-//				String name = rs.getString("name");
-//			
-//				category = new Category( name );
-//				category.setName( name );
-//				
-//			}
 			stmt.close();
 			conn.close();
 	 }

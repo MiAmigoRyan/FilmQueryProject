@@ -12,11 +12,11 @@ import com.skilldistillery.filmquery.entities.Film;
 public class FilmQueryApp {
 
 	private DatabaseAccessor db = new DatabaseAccessorObject();
-	
-	private int in ;
-	
+
+	private int in;
+
 	private String keyword;
-	
+
 	public static void main(String[] args) throws SQLException {
 		FilmQueryApp app = new FilmQueryApp();
 //		app.test();
@@ -52,11 +52,11 @@ public class FilmQueryApp {
 		} else {
 			System.out.println("this actor has not appeared in any films");
 		}
-		
+
 		List<Film> films2 = db.findFilmsByKeyword("dog");
 		if (films2 != null) {
 			System.out.println(films2);
-		}else {
+		} else {
 			System.out.println("sorry no match, please try again ");
 		}
 
@@ -71,188 +71,184 @@ public class FilmQueryApp {
 	private void startUserInterface(Scanner input) {
 		int choice;
 		do {
-		System.out.println(" ----------------------------"
-				+ "\n Choose  one " 
-		        + "\n 1 : look up film by film ID " 
-				+ "\n 2 : look up film by keyword " 
-		        + "\n 3 : exit ");
-		
-		choice= input.nextInt();
-		
-		switch (choice) {
-		case 1:
-			
-			filmByFilmId(input);
-			
-			break;
-		case 2:
-			
-			filmByKeyword(input);
-			
-			break;
-		case 3:
-			exit();
-			break;
-		default:
-			System.out.println("Invalid input");
+			System.out.println(" ----------------------------" + "\n Choose  one " + "\n 1 : look up film by film ID "
+					+ "\n 2 : look up film by keyword " + "\n 3 : exit ");
+
+			choice = input.nextInt();
+
+			switch (choice) {
+			case 1:
+
+				filmByFilmId(input);
+
+				break;
+			case 2:
+
+				filmByKeyword(input);
+
+				break;
+			case 3:
+				exit();
+				break;
+			default:
+				System.out.println("Invalid input");
 			}
 		} while (choice != 3);
 	}
+
 	private void subMenuByID(Scanner input) {
 
-		System.out.println(" ----------------------------\n"
-				+ "\n Choose  one "
-				+ "\n 1 : Show all film details "
+		System.out.println(" ----------------------------\n" + "\n Choose  one " + "\n 1 : Show all film details "
 				+ "\n 2 : Return to Main Menu ");
 		int choice;
 		choice = input.nextInt();
 		do {
-		switch(choice) {
-		case 1:
-			filmDetailsById(input);
-			break;
-		case 2:
-			System.out.println("returning to main menu");
-			break;
-		default:
-			System.out.println("Invalid input, choose 1 or 2");
-			break;
-			}	
+			switch (choice) {
+			case 1:
+				filmDetailsById(input);
+				break;
+			case 2:
+				System.out.println("returning to main menu");
+				break;
+			default:
+				System.out.println("Invalid input, choose 1 or 2");
+				break;
+			}
 		} while (choice != 1);
-		
+
 	}
+
 	private void filmDetailsById(Scanner input) {
-		
-		
-		Film film = db.findFilmById( in );
-		
+
+		Film film = db.findFilmById(in);
+
 		if (film != null) {
 			System.out.println(film);
-			System.out.print("Language :"); 
-			langIdTranslator(film.getLangId());	
+			System.out.print("Language :");
+			langIdTranslator(film.getLangId());
 			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 			if (actors != null) {
 				System.out.println("Actors : ");
-				for(Actor actor : actors) {
-					System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+				for (Actor actor : actors) {
+					System.out.println("-" + actor.getFirstName() + " " + actor.getLastName());
 				}
-			
-			System.out.println( db.findCategoryByFilmId( in ));						
+
+				System.out.println(db.findCategoryByFilmId(in));
 			}
 		}
 	}
+
 	private void subMenuByKeyword(Scanner input, List<Film> films) {
 
-		System.out.println(" ----------------------------\n"
-				+ "\n Choose  one "
-				+ "\n 1 : Show all film details "
+		System.out.println(" ----------------------------\n" + "\n Choose  one " + "\n 1 : Show all film details "
 				+ "\n 2 : Return to Main Menu ");
 		int choice;
 		choice = input.nextInt();
 		do {
-		switch(choice) {
-		case 1:
-			filmDetailsByKeyword(input, films);
-			break;
-		case 2:
-			System.out.println("returning to main menu");
-			break;
-		default:
-			System.out.println("Invalid input, choose 1 or 2");
-			break;
-			}	
+			switch (choice) {
+			case 1:
+				filmDetailsByKeyword(input, films);
+				break;
+			case 2:
+				System.out.println("returning to main menu");
+				break;
+			default:
+				System.out.println("Invalid input, choose 1 or 2");
+				break;
+			}
 		} while (choice != 1);
-	
+
 	}
-	private void filmDetailsByKeyword(Scanner input, List<Film> films) {	
-		//System.out.println(keyword);
-		
-		
-		if (films != null ) {
-			System.out.println(films.size() + " films found from query" +"\""+keyword+"\"");
-			for(Film film : films) {
-				System.out.println(film);				
-				System.out.print("Language :"); 
+
+	private void filmDetailsByKeyword(Scanner input, List<Film> films) {
+
+		if (films != null) {
+			
+			System.out.println(films.size() + " films found from query" + "\"" + keyword + "\"");
+			
+			for (Film film : films) {
+				System.out.println(film);
+				System.out.print("Language :");
 				langIdTranslator(film.getLangId());
-				System.out.print("Category : "); 
+				System.out.print("Category : ");
 				System.out.println(db.findCategoryByFilmId(film.getFilmId()));
-				
-		
+
 			}
 		}
 	}
-	
-	private List<Film> filmKeyQuery(String keyword){
+
+	private List<Film> filmKeyQuery(String keyword) {
 		return db.findFilmsByKeyword(keyword);
 	}
-		
+
 	private void filmByFilmId(Scanner input) {
-		
+
 		System.out.println("enter film ID ");
-		
+
 		in = input.nextInt();
 
 		Film film = db.findFilmById(in);
 		if (film != null) {
 			System.out.println(film.getTitle());
 			System.out.println(film.getDesc());
-			System.out.print("Language :"); 
+			System.out.print("Language :");
 			langIdTranslator(film.getLangId());
-			System.out.println("Release year :"+film.getReleaseYear());
-			System.out.println("Rating :"+film.getRating());
+			System.out.println("Release year :" + film.getReleaseYear());
+			System.out.println("Rating :" + film.getRating());
 			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 			if (actors != null) {
 				System.out.println("Actors : ");
-				for(Actor actor : actors) {
-					System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+				for (Actor actor : actors) {
+					System.out.println("-" + actor.getFirstName() + " " + actor.getLastName());
 				}
 			} else {
 				System.out.println("there were no actors in this film");
-			
-			} subMenuByID(input);
-			
+
+			}
+			subMenuByID(input);
+
 			System.out.println("\n");
-			
+
 		} else {
 			System.out.println("no such film exists");
 
 		}
-		
+
 	}
-	
+
 	private void filmByKeyword(Scanner input) {
 		System.out.println("enter keyword ");
-		
+
 		keyword = input.next();
-		
+
 		List<Film> films = db.findFilmsByKeyword(keyword);
 		if (films != null) {
-			for( Film film : films) {
+			for (Film film : films) {
 				in = film.getFilmId();
 				System.out.println(film.getTitle());
 				System.out.println(film.getDesc());
-				System.out.print("Language :"); 
+				System.out.print("Language :");
 				langIdTranslator(film.getLangId());
-				System.out.println("Release year :"+film.getReleaseYear());
-				System.out.println("Rating :"+film.getRating());
+				System.out.println("Release year :" + film.getReleaseYear());
+				System.out.println("Rating :" + film.getRating());
 				List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
 				if (actors != null) {
 					System.out.println("Actors : ");
-					for(Actor actor : actors) {
-						System.out.println("-"+actor.getFirstName() + " " + actor.getLastName());
+					for (Actor actor : actors) {
+						System.out.println("-" + actor.getFirstName() + " " + actor.getLastName());
 					}
 				} else {
 					System.out.println("there were no actors in this film");
 				}
-			} 
+			}
 			subMenuByKeyword(input, films);
-			
-		}else {
+
+		} else {
 			System.out.println("sorry no match, please try again ");
-		}		
-	
+		}
+
 	}
-	
+
 	private void langIdTranslator(int lang) {
 		if (lang == 1) {
 			System.out.println("English");
@@ -272,8 +268,9 @@ public class FilmQueryApp {
 		if (lang == 6) {
 			System.out.println("German");
 		}
-		
+
 	}
+
 	private void exit() {
 		System.out.println("thank you come again! ");
 	}
