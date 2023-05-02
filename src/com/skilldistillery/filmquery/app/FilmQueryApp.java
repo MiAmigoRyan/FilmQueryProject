@@ -4,10 +4,13 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Scanner;
 
+
 import com.skilldistillery.filmquery.database.DatabaseAccessor;
 import com.skilldistillery.filmquery.database.DatabaseAccessorObject;
 import com.skilldistillery.filmquery.entities.Actor;
 import com.skilldistillery.filmquery.entities.Film;
+import com.skilldistillery.filmquery.entities.Copies;
+
 
 public class FilmQueryApp {
 
@@ -112,7 +115,7 @@ public class FilmQueryApp {
 				break;
 			default:
 				System.out.println("Invalid input, choose 1 or 2");
-				break;
+				
 			}
 		} while (choice != 1);
 
@@ -126,17 +129,26 @@ public class FilmQueryApp {
 			System.out.println(film);
 			System.out.print("Language :");
 			langIdTranslator(film.getLangId());
-			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
-			if (actors != null) {
-				System.out.println("Actors : ");
-				for (Actor actor : actors) {
-					System.out.println("-" + actor.getFirstName() + " " + actor.getLastName());
-				}
-
+//			List<Actor> actors = db.findActorsByFilmId(film.getFilmId());
+//			if (actors != null) {
+//				System.out.println("Actors : ");
+//				for (Actor actor : actors) {
+//					System.out.println("-" + actor.getFirstName() + " " + actor.getLastName());
+//				}
+				
 				System.out.println(db.findCategoryByFilmId(in));
+				
+				
+				List<Copies> copies = db.findCopiesById(film.getFilmId());
+				if(copies != null) {
+					for( Copies copy : copies) {
+						System.out.println(copy.toString());
+					}
+				}
+				
 			}
 		}
-	}
+
 
 	private void subMenuByKeyword(Scanner input, List<Film> films) {
 
@@ -172,7 +184,7 @@ public class FilmQueryApp {
 				langIdTranslator(film.getLangId());
 				System.out.print("Category : ");
 				System.out.println(db.findCategoryByFilmId(film.getFilmId()));
-
+				System.out.println(db.findCopiesById(film.getFilmId()));
 			}
 		}
 	}

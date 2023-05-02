@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.skilldistillery.filmquery.entities.Actor;
+import com.skilldistillery.filmquery.entities.Copies;
 import com.skilldistillery.filmquery.entities.Film;
 
 public class DatabaseAccessorObject implements DatabaseAccessor {
@@ -203,13 +204,9 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 	}
 	
  public Category findCategoryByFilmId(Integer filmId) {
-	 
-	 System.out.println ( "###"+ filmId );
-	 
-	 Category category = new Category();
 
-	
-	 try {
+	 Category category = new Category();
+	try {
 		 String sql = "SELECT name "
 				+ "FROM category "
                	+ "JOIN film_category " 
@@ -230,18 +227,54 @@ public class DatabaseAccessorObject implements DatabaseAccessor {
 				System.out.println ( filmId );
 				String name = rs.getString("name");
 			
-				category = new Category( name );
-				category.setName( name );
-				
+		        category = new Category( name );
+				category.setName( name );			
 			}
+			rs.close();
 			stmt.close();
 			conn.close();
 	 }
-	 
 	 catch (SQLException e) {
 		 e.printStackTrace();
 	 }
-	 return category;
+	 return category; 
+ }
+
+ public List<Copies> findCopiesById(int filmId) {
+	List<Copies> copies = new ArrayList<>();
 	 
+	try {
+		 String sql = " SELECT inventory_item.id, media_condition "
+				+" FROM inventory_item "
+				+" JOIN film "
+				+" ON inventory_item.film_id = film.id "
+				+" WHERE film_id = ?";
+		 
+		 Connection conn = DriverManager.getConnection(URL, USER, PWD);
+		 PreparedStatement stmt = conn.prepareStatement(sql);
+		 
+		 stmt.setInt(1, filmId);
+		 
+		 ResultSet rs = stmt.executeQuery();
+		 
+		 while(rs.next()) {
+			 String cond = rs.getString("media_condition");
+			 int copyId = rs.getInt("id");
+			 
+			 Copies copy = new Copies(cond, copyId);
+			 copy.setCondition(cond);
+			
+			 copies.add(copy);
+			 
+		 }
+		 rs.close();
+		 stmt.close();
+		 conn.close();
+	 }
+	 catch (SQLException e) {
+		 e.printStackTrace();
+	 }
+	 
+	 return copies; 
  }
 }
